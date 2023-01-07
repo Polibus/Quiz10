@@ -4,15 +4,6 @@ import { View, Text,StyleSheet,Button,TouchableOpacity,FlatList,ActivityIndicato
 import _ from 'lodash';
 import NetInfo from "@react-native-community/netinfo";
 
-const elo = () => {
-    console.log('elo')
-}
-
-const elo2 = () => {
-    console.log()
-}
-
-
 const CustomDrawer =(props,navigation) => {
   let name='drawer'
   const [quizList, setQuizList] = useState();
@@ -52,13 +43,16 @@ const CustomDrawer =(props,navigation) => {
 }
 
 
+
     return (
         <DrawerContentScrollView {...props}>
             <DrawerItemList {...props}/>
             <DrawerItem
                 label='Refresh Test'
-                onPress={() => netInfo()}/>   
+                onPress={() => netInfo()}/> 
         </DrawerContentScrollView>
+
+
         
     )
 }

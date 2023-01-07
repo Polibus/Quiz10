@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -6,8 +6,36 @@ import { DrawerItem } from '@react-navigation/drawer';
 import { Home, ResultScreen, Test, Score,Name,RandomTest} from '../Screens';
 import CustomDrawer from './CustomDrawer';
 const Drawer = createDrawerNavigator();
-
+import _ from 'lodash';
 function Routes() {
+  let name = 'drawer'
+  const [isLoading, setLoading] = useState(true);
+  const [data, setData] = useState([]);
+  const getQuiz = async () => {
+    try {
+     const res = await (await fetch('https://tgryl.pl/quiz/tests')).json();
+     setData(_.shuffle(res));
+   } catch (error) {
+     console.error(error);
+   } finally {
+     setLoading(false);
+   }
+ }
+
+
+ useEffect(() => {
+  getQuiz();
+}, []);
+
+  const drawerQuiz = () =>{
+    return(data.map((da, index) => {
+        return (
+            <Drawer.Screen key={index+".drawer_quiz_"+da.id} name={da.name} component={Test}  initialParams={{name: name,idParam: da.id}}/>
+        );
+    }))
+  }
+
+
   return (
     <NavigationContainer>
       <Drawer.Navigator drawerContent={props =><CustomDrawer {...props} />}>
@@ -29,8 +57,11 @@ function Routes() {
             component={RandomTest}
             options={{unmountOnBlur: true}}
             />
+        {drawerQuiz()}
       </Drawer.Navigator>
      </NavigationContainer>
+     
+
      
   );
 }
